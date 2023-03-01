@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -31,5 +33,25 @@ public class CustomerInformation {
         } else {
             this.accountNumbers = Arrays.asList(tableRow.get(4).split(" "));
         }
+    }
+
+    public static CustomerInformation random() {
+        String randomString = RandomStringUtils.randomAlphanumeric(5);
+        return CustomerInformation.builder()
+                .firstName(String.format("F%s", randomString))
+                .lastName(String.format("L%s", randomString))
+                .postCode(randomString)
+                .build();
+    }
+
+    public String toStringShort() {
+        return String.format("%s %s", this.firstName, this.lastName);
+    }
+
+    public void addAccount(String accountNumber) {
+        if (this.accountNumbers == null) {
+            this.accountNumbers = new ArrayList<>();
+        }
+        this.accountNumbers.add(accountNumber);
     }
 }

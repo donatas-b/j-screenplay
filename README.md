@@ -24,3 +24,5 @@ https://johnfergusonsmart.com/serenity-bdd/
 https://medium.com/@simplymahmoud/screenplay-design-pattern-in-test-automation-a9f21ec3ddd3
 
 https://janmolak.com/serenity-bdd-and-the-screenplay-pattern-27819d0db780
+
+https://github.com/jan-molak/jenkins-build-monitor-plugin/tree/master/build-monitor-acceptance/src/main/java/com/smartcodeltd/jenkinsci/plugins/build_monitor
