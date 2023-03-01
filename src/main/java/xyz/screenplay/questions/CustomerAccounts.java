@@ -7,7 +7,6 @@ import net.thucydides.core.pages.components.HtmlTable;
 import xyz.screenplay.model.CustomerInformation;
 import xyz.screenplay.userInterface.CustomersPage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class CustomerAccounts implements Question<List<String>> {
                 return customerRow.getAccountNumbers();
             }
         }
-        return new ArrayList<>();
+        throw new IllegalArgumentException(String.format("Customer %s was not found", ofCustomer.toString()));
     }
 
     public static Question<List<String>> all(CustomerInformation ofCustomer) {

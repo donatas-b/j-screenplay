@@ -72,6 +72,7 @@ public class ManagerSteps {
     }
 
     @And("Customer should appear in Customers list")
+    @And("Customer appears in Customers list")
     public void customerShouldAppearInCustomersList() {
         theActorInTheSpotlight().attemptsTo(Manager.goToCustomers());
         theActorInTheSpotlight().should(seeThat(CustomerList.asStrings(), hasItem(currentCustomer.toString())));
@@ -115,5 +116,18 @@ public class ManagerSteps {
     @And("Customers list should contain {int} Customer")
     public void customersListShouldContainCustomer(int customerCount) {
         theActorInTheSpotlight().should(seeThat(CustomerCount.is(), comparesEqualTo(customerCount)));
+    }
+
+    @When("{actor} deletes the Customer")
+    public void managerDeletesTheCustomer(Actor actor) {
+        actor.attemptsTo(Manager.goToCustomers());
+        actor.attemptsTo(Manager.deleteCustomer(currentCustomer));
+    }
+
+    @Then("Customer should no longer appear in Customers list")
+    public void customerShouldNoLongerAppearInCustomersList() {
+        theActorInTheSpotlight().attemptsTo(Manager.clearCustomerSearch());
+        theActorInTheSpotlight().attemptsTo(Manager.searchCustomers(currentCustomer));
+        theActorInTheSpotlight().should(seeThat(CustomerCount.is(), comparesEqualTo(0)));
     }
 }
