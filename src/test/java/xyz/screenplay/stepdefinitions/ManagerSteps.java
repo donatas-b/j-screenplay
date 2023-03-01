@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import xyz.screenplay.model.Currency;
 import xyz.screenplay.model.CustomerInformation;
 import xyz.screenplay.questions.CustomerAccounts;
+import xyz.screenplay.questions.CustomerCount;
 import xyz.screenplay.questions.CustomerFields;
 import xyz.screenplay.questions.CustomerList;
 import xyz.screenplay.tasks.Customer;
@@ -22,8 +23,7 @@ import xyz.screenplay.tasks.Navigate;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 
 @Slf4j
 public class ManagerSteps {
@@ -103,5 +103,17 @@ public class ManagerSteps {
         theActorInTheSpotlight().attemptsTo(Manager.goToCustomers());
         theActorInTheSpotlight().should(seeThat(CustomerAccounts.all(currentCustomer), hasItem(createdCustomerAccountNumber)));
         log.info("Customer Account was saved");
+    }
+
+    @When("{actor} does Search for Customer")
+    public void managerDoesSearchForCustomer(Actor actor) {
+        actor.attemptsTo(Manager.goToCustomers());
+        actor.attemptsTo(Manager.searchCustomers(currentCustomer));
+        actor.should(seeThat(CustomerList.asStrings(), hasItem(currentCustomer.toString())));
+    }
+
+    @And("Customers list should contain {int} Customer")
+    public void customersListShouldContainCustomer(int customerCount) {
+        theActorInTheSpotlight().should(seeThat(CustomerCount.is(), comparesEqualTo(customerCount)));
     }
 }
