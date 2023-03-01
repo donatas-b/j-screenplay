@@ -16,3 +16,11 @@ Feature: Bank Manager functionality
     And there is a Customer
     When Manager opens "Dollar" Account for Customer
     Then Customer Account should appear in Customers list
+
+
+  Scenario: Manager can Search Customers
+    Given Manager has logged in
+    And there is a Customer
+    When Manager does Search for Customer
+    Then Customer should appear in Customers list
+    And Customers list should contain 1 Customer
