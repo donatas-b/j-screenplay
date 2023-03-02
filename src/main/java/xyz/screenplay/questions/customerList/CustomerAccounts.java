@@ -1,4 +1,4 @@
-package xyz.screenplay.questions;
+package xyz.screenplay.questions.customerList;
 
 import lombok.AllArgsConstructor;
 import net.serenitybdd.screenplay.Actor;
@@ -24,10 +24,6 @@ public class CustomerAccounts implements Question<List<String>> {
             }
         }
         throw new IllegalArgumentException(String.format("Customer %s was not found", ofCustomer.toString()));
-    }
-
-    public static Question<List<String>> all(CustomerInformation ofCustomer) {
-        return new CustomerAccounts(ofCustomer);
     }
 
 }

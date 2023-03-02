@@ -1,4 +1,4 @@
-package xyz.screenplay.questions;
+package xyz.screenplay.questions.customerList;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
@@ -15,7 +15,4 @@ public class CustomerCount implements Question<Integer> {
         return table.size() - 1;
     }
 
-    public static Question<Integer> is() {
-        return new CustomerCount();
-    }
 }

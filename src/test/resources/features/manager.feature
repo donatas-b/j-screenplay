@@ -8,27 +8,40 @@ Feature: Bank Manager functionality
     When he enters new Customer data
     And he tries to save it
     Then Customer fields should be cleared
-    And Customer should appear in Customers list
+    And Customer should appear in Customer List
 
 
   Scenario: Manager can Open Account for Customer
     Given Manager has logged in
     And there is a Customer
     When Manager opens "Dollar" Account for Customer
-    Then Customer Account should appear in Customers list
+    Then Customer Account should appear in Customer List
 
 
   Scenario: Manager can Search Customers
     Given Manager has logged in
     And there is a Customer
     When Manager does Search for Customer
-    Then Customer should appear in Customers list
-    And Customers list should contain 1 Customer
+    Then Customer should appear in Customer List
+    And Customer List should contain 1 Customer
 
 
-  Scenario: Manager can Delete Customers
+  Scenario Outline: Manager can Sort Customers
     Given Manager has logged in
     And there is a Customer
-    And Customer appears in Customers list
+    When Manager Sorts Customer List by "<column>" in "<sortOrder>" order
+    Then Customer list should be sorted by "<column>" in "<sortOrder>" order
+#   delete created Customer - looks like for Scenario Outline browser is not restarted properly
+    And Manager deletes the Customer
+    Examples:
+      | column     | sortOrder  |
+      | First Name | Ascending  |
+      | Post Code  | Descending |
+
+
+  Scenario: Manager can Delete Customer
+    Given Manager has logged in
+    And there is a Customer
+    And Customer appears in Customer List
     When Manager deletes the Customer
-    Then Customer should no longer appear in Customers list
+    Then Customer should no longer appear in Customer List
