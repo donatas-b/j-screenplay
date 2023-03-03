@@ -79,7 +79,6 @@ public class ManagerSteps {
     public void thereIsACustomer() {
         theActorInTheSpotlight().attemptsTo(Manager.goToAddCustomer());
         currentCustomer = CustomerInformation.random();
-        Serenity.setSessionVariable("currentCustomer").to(currentCustomer);
         theActorInTheSpotlight().attemptsTo(Customer.enterInformation(currentCustomer));
         theActorInTheSpotlight().attemptsTo(Customer.addCustomer());
         log.info("new Customer was created");
