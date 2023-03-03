@@ -1,7 +1,6 @@
 package xyz.screenplay.stepdefinitions;
 
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +16,7 @@ import xyz.screenplay.model.SortOrder;
 import xyz.screenplay.questions.CustomerFields;
 import xyz.screenplay.questions.CustomerList;
 import xyz.screenplay.tasks.Customer;
-import xyz.screenplay.tasks.Login;
 import xyz.screenplay.tasks.Manager;
-import xyz.screenplay.tasks.Navigate;
 
 import java.util.Comparator;
 import java.util.List;
@@ -27,7 +24,9 @@ import java.util.List;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 
 @Slf4j
 public class ManagerSteps {
@@ -43,13 +42,6 @@ public class ManagerSteps {
         return alertMessage;
     }
 
-    @Given("{actor} has logged in")
-    public void managerHasLoggedIn(Actor actor) {
-        actor.attemptsTo(Navigate.toBankPage());
-        actor.attemptsTo(Login.asBankManager());
-        log.info("{} has logged in", actor.getName());
-    }
-
     @When("{actor} enters new Customer data")
     public void managerEntersNewCustomerData(Actor actor) {
         actor.attemptsTo(Manager.goToAddCustomer());
@@ -63,7 +55,7 @@ public class ManagerSteps {
     public void triesToSaveIt(Actor actor) {
         actor.attemptsTo(Customer.addCustomer());
         String alertMessage = getAlertMessage();
-        log.info("Alert says: {}", getAlertMessage());
+        log.info("Alert says: {}", alertMessage);
         //TODO: for some reason alert disappears when BrowserAlert.says() is called
 //        actor.should(seeThat(BrowserAlert.says(Serenity.getDriver()), containsString("Customer added successfully with customer id")));
         actor.attemptsTo(Ensure.that(alertMessage).contains("Customer added successfully with customer id"));
@@ -87,6 +79,7 @@ public class ManagerSteps {
     public void thereIsACustomer() {
         theActorInTheSpotlight().attemptsTo(Manager.goToAddCustomer());
         currentCustomer = CustomerInformation.random();
+        Serenity.setSessionVariable("currentCustomer").to(currentCustomer);
         theActorInTheSpotlight().attemptsTo(Customer.enterInformation(currentCustomer));
         theActorInTheSpotlight().attemptsTo(Customer.addCustomer());
         log.info("new Customer was created");
@@ -174,4 +167,5 @@ public class ManagerSteps {
 
         theActorInTheSpotlight().attemptsTo(Ensure.that(expectedCustomerListStrings).isEqualTo(actualCustomerListStrings));
     }
+
 }
