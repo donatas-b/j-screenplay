@@ -3,12 +3,14 @@ package xyz.screenplay.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Map;
 
 @Builder
 @Getter
 @AllArgsConstructor
+@ToString
 public class CustomerTransaction {
     private String dateTime;
     private Integer amount;

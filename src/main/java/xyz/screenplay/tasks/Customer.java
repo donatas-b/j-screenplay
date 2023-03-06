@@ -5,8 +5,10 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.targets.Target;
 import xyz.screenplay.model.Currency;
 import xyz.screenplay.model.CustomerInformation;
+import xyz.screenplay.model.SortOrder;
 import xyz.screenplay.userInterface.*;
 
 @Slf4j
@@ -68,5 +70,19 @@ public class Customer {
     public static Task transactions() {
         return Task.where("Go to Customer Transactions",
                 Click.on(CustomerHomePage.BTN_TRANSACTIONS));
+    }
+
+    public static Task sortTransactions(SortOrder order) {
+        Target sortColumn = CustomerTransactionsPage.LNK_DATE;
+        switch (order) {
+            case DESC -> {
+                return Task.where("Sort Transactions", Click.on(sortColumn));
+            }
+            case ASC -> {
+                return Task.where("Sort Transactions", Click.on(sortColumn).then(Click.on(sortColumn)));
+            }
+        }
+        throw new IllegalArgumentException("Unknown SortOrder");
+
     }
 }
