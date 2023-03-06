@@ -8,8 +8,8 @@ import net.serenitybdd.screenplay.actions.SelectFromOptions;
 import xyz.screenplay.model.Currency;
 import xyz.screenplay.model.CustomerInformation;
 import xyz.screenplay.userInterface.AddCustomerPage;
-import xyz.screenplay.userInterface.CustomerDepositPage;
 import xyz.screenplay.userInterface.CustomerHomePage;
+import xyz.screenplay.userInterface.CustomerTransactionPage;
 import xyz.screenplay.userInterface.OpenAccountPage;
 
 @Slf4j
@@ -42,10 +42,19 @@ public class Customer {
     }
 
     public static Task deposit(Integer amount) {
-        return Task.where("Adding Customer Account",
+        return Task.where("Customer Deposits money into his Account",
                 Click.on(CustomerHomePage.BTN_DEPOSIT).then(
-                        Enter.theValue(amount.toString()).into(CustomerDepositPage.INP_AMOUNT).then(
-                                Click.on(CustomerDepositPage.BTN_DEPOSIT)
+                        Enter.theValue(amount.toString()).into(CustomerTransactionPage.INP_AMOUNT).then(
+                                Click.on(CustomerTransactionPage.BTN_TRANSACTION)
+                        )
+                ));
+    }
+
+    public static Task withdraw(Integer amount) {
+        return Task.where("Customer Withdraws money from his Account",
+                Click.on(CustomerHomePage.BTN_WITHDRAWAL).then(
+                        Enter.theValue(amount.toString()).into(CustomerTransactionPage.INP_AMOUNT).then(
+                                Click.on(CustomerTransactionPage.BTN_TRANSACTION)
                         )
                 ));
     }
