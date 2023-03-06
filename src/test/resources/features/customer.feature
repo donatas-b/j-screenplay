@@ -33,3 +33,19 @@ Feature: Bank Customer functionality
     And Customer withdraws 77 "Rupee" from his "1009" account
     When Customer Resets his "1009" account
     Then his "1009" Account Summary should have 0 "Rupee"
+
+
+  Scenario: Customer can check Transactions which happened in his Account
+    Given Customer has logged in
+    And Customer deposits 1213 "Pound" into his "1008" account
+    And he logs out
+    And he logs in again
+    And Customer withdraws 177 "Pound" from his "1008" account
+    And he logs out
+    And he logs in again
+    And Customer withdraws 217 "Pound" from his "1008" account
+    Then Customer "1008" Account Transactions should contain following records
+      | Amount | TransactionType |
+      | 1213   | Credit          |
+      | 177    | Debit           |
+      | 217    | Debit           |

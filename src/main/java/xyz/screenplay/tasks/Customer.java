@@ -64,4 +64,9 @@ public class Customer {
                         )
                 ));
     }
+
+    public static Task transactions() {
+        return Task.where("Go to Customer Transactions",
+                Click.on(CustomerHomePage.BTN_TRANSACTIONS));
+    }
 }
