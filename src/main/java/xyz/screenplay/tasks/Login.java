@@ -15,6 +15,12 @@ public class Login {
                 )));
     }
 
+    public static Task asCustomerAgain() {
+        return Task.where("Login as Customer again", SelectFromOptions.byVisibleText("Ron Weasly").from(CustomerLoginPage.DRP_YOUR_NAME).then(
+                Click.on(CustomerLoginPage.BTN_LOGIN)
+        ));
+    }
+
     public static Task asBankManager() {
         return Task.where("Login as Bank Manager", Click.on(LoginPage.BTN_BANK_MANAGER_LOGIN));
     }
