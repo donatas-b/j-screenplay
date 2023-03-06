@@ -135,7 +135,6 @@ public class ManagerSteps {
 
     @Then("Customer list should be sorted by {string} in {string} order")
     public void customerListShouldBeSortedByInOrder(String sortColumnName, String sortOrder) {
-        theActorInTheSpotlight().attemptsTo(Manager.goToCustomers());
         List<CustomerInformation> actualCustomerList = CustomerList.asObjects().answeredBy(theActorInTheSpotlight());
         log.info("before sort: {}", actualCustomerList);
         switch (SortOrder.byValue(sortOrder)) {

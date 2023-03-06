@@ -6,10 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.ensure.Ensure;
-import xyz.screenplay.model.AccountSummary;
-import xyz.screenplay.model.Currency;
-import xyz.screenplay.model.CustomerTransaction;
-import xyz.screenplay.model.TransactionType;
+import xyz.screenplay.model.*;
 import xyz.screenplay.questions.CustomerAccount;
 import xyz.screenplay.questions.CustomerSuccess;
 import xyz.screenplay.questions.CustomerTransactions;
@@ -18,6 +15,7 @@ import xyz.screenplay.tasks.Login;
 import xyz.screenplay.tasks.Navigate;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +82,28 @@ public class CustomerSteps {
                     .build());
         }
         List<String> actualTransactions = CustomerTransactions.all().answeredBy(actor).stream().map(CustomerTransaction::toStringNoDate).toList();
-        ;
+
         expectedTransactions.forEach(expectedTransaction -> actor.attemptsTo(Ensure.that(actualTransactions).contains(expectedTransaction.toStringNoDate())));
+    }
+
+    @When("{actor} Sorts his {string} Account Transactions by Date in {string} order")
+    public void customerSortsHisAccountTransactionsByDateInOrder(Actor actor, String accountNumber, String sortOrder) {
+        actor.attemptsTo(Customer.selectAccount(accountNumber));
+        actor.attemptsTo(Customer.transactions());
+        actor.attemptsTo(Customer.sortTransactions(SortOrder.byValue(sortOrder)));
+    }
+
+    @Then("{actor} Account Transactions should be sorted by Date in {string} order")
+    public void customerAccountTransactionsShouldBeSortedByDateInOrder(Actor actor, String sortOrder) {
+        List<CustomerTransaction> transactions = CustomerTransactions.all().answeredBy(actor);
+        switch (SortOrder.byValue(sortOrder)) {
+            case ASC -> transactions.sort(Comparator.comparing(CustomerTransaction::getDateTime));
+            case DESC -> transactions.sort(Comparator.comparing(CustomerTransaction::getDateTime).reversed());
+        }
+
+        List<String> actualTransactions = CustomerTransactions.all().answeredBy(actor).stream().map(CustomerTransaction::toString).toList();
+        List<String> expectedTransactions = transactions.stream().map(CustomerTransaction::toString).toList();
+
+        theActorInTheSpotlight().attemptsTo(Ensure.that(actualTransactions).isEqualTo(expectedTransactions));
     }
 }
