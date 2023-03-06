@@ -11,5 +11,6 @@ public class CustomerHomePage {
     public static final Target BTN_TRANSACTIONS = Button.containingText("Transactions");
     public static final Target BTN_DEPOSIT = Button.containingText("Deposit");
     public static final Target BTN_WITHDRAWAL = Button.containingText("Withdrawl");
+    public static final Target LBL_MESSAGE = Target.the("Customer message").locatedBy("//span[contains(@class, 'error')]");
 
 }
