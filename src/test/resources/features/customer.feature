@@ -23,3 +23,13 @@ Feature: Bank Customer functionality
     When Customer withdraws 77 "Rupee" from his "1009" account
     Then he should see success message "Transaction successful"
     And his "1009" Account Summary should have 136 "Rupee"
+
+
+  Scenario: Customer can Reset his Account
+    Given Customer has logged in
+    And Customer deposits 213 "Rupee" into his "1009" account
+    And he logs out
+    And he logs in again
+    And Customer withdraws 77 "Rupee" from his "1009" account
+    When Customer Resets his "1009" account
+    Then his "1009" Account Summary should have 0 "Rupee"

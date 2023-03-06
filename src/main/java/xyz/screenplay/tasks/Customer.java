@@ -7,10 +7,7 @@ import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
 import xyz.screenplay.model.Currency;
 import xyz.screenplay.model.CustomerInformation;
-import xyz.screenplay.userInterface.AddCustomerPage;
-import xyz.screenplay.userInterface.CustomerHomePage;
-import xyz.screenplay.userInterface.CustomerTransactionPage;
-import xyz.screenplay.userInterface.OpenAccountPage;
+import xyz.screenplay.userInterface.*;
 
 @Slf4j
 public class Customer {
@@ -55,6 +52,15 @@ public class Customer {
                 Click.on(CustomerHomePage.BTN_WITHDRAWAL).then(
                         Enter.theValue(amount.toString()).into(CustomerTransactionPage.INP_AMOUNT).then(
                                 Click.on(CustomerTransactionPage.BTN_TRANSACTION)
+                        )
+                ));
+    }
+
+    public static Task resetAccount() {
+        return Task.where("Reset Customer Account",
+                Click.on(CustomerHomePage.BTN_TRANSACTIONS).then(
+                        Click.on(CustomerTransactionsPage.BTN_RESET).then(
+                                Click.on((CustomerTransactionsPage.BTN_BACK))
                         )
                 ));
     }

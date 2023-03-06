@@ -55,4 +55,10 @@ public class CustomerSteps {
     public void heLogsInAgain(Actor actor) {
         actor.attemptsTo(Login.asCustomerAgain());
     }
+
+    @When("{actor} Resets his {string} account")
+    public void customerResetsHisAccount(Actor actor, String accountNumber) {
+        actor.attemptsTo(Customer.selectAccount(accountNumber));
+        actor.attemptsTo(Customer.resetAccount());
+    }
 }
