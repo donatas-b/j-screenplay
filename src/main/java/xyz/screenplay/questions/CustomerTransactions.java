@@ -15,7 +15,7 @@ public class CustomerTransactions implements Question<List<CustomerTransaction>>
     @Override
     public List<CustomerTransaction> answeredBy(Actor actor) {
         List<CustomerTransaction> result = new ArrayList<>();
-        List<Map<Object, String>> table = HtmlTable.rowsFrom(CustomerTransactionsPage.TBL_TRANSACTIONS.resolveFor(actor).withTimeoutOf(Duration.ofSeconds(1)));
+        List<Map<Object, String>> table = HtmlTable.rowsFrom(CustomerTransactionsPage.TBL_TRANSACTIONS.resolveFor(actor).waitUntilPresent().withTimeoutOf(Duration.ofSeconds(1)));
         table.subList(1, table.size()).forEach(row -> result.add(new CustomerTransaction(row)));
         return result;
     }
