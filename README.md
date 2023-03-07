@@ -13,10 +13,8 @@ $ mvn clean verify
 
 
 ## Useful links
-https://github.com/serenity-bdd/screenplay-pattern-todomvc
 
-https://github.com/serenity-bdd/serenity-cucumber-starter
-
+### Web pages
 https://serenity-bdd.github.io/docs/tutorials/first_test
 
 https://johnfergusonsmart.com/serenity-bdd/
@@ -25,4 +23,12 @@ https://medium.com/@simplymahmoud/screenplay-design-pattern-in-test-automation-a
 
 https://janmolak.com/serenity-bdd-and-the-screenplay-pattern-27819d0db780
 
+### GitHub repositories
+
+https://github.com/serenity-bdd/screenplay-pattern-todomvc
+
+https://github.com/serenity-bdd/serenity-cucumber-starter
+
 https://github.com/jan-molak/jenkins-build-monitor-plugin/tree/master/build-monitor-acceptance/src/main/java/com/smartcodeltd/jenkinsci/plugins/build_monitor
+
+https://github.com/serenity-bdd/bdd-trader
