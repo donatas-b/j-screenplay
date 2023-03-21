@@ -1,15 +1,16 @@
 # j-screenplay
-This is an attempt to learn Screenplay pattern for web UI test automation. The tests are utilizing [XYZ Bank](https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login) application.
+This is an example of Screenplay pattern for web UI test automation. The tests are utilizing [XYZ Bank](https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login) application.
 
-Project is using Java with Serenity BDD.
+Project is using Java with Serenity BDD, Cucumber and JUnit.
 
 ## Executing the tests
-To run the sample project, you can either just run the `Tests` test runner class, use maven from the command line or run feature/ scenarioi individually from e.g. IntelliJ.
+To run the sample project, you can either just run the `Tests` test runner class, use maven from the command line or run feature/ scenario individually from e.g. IntelliJ.
 
 By default, the tests will run using Chrome. This and other configuration values can be changed in `serenity.conf`
 ```
 $ mvn clean verify
 ```
+Test report will be generated at `target/site/serenity/index.html`
 
 
 ## Useful links
