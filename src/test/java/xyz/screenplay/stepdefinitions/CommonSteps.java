@@ -3,23 +3,28 @@ package xyz.screenplay.stepdefinitions;
 import io.cucumber.java.en.Given;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.screenplay.Actor;
-import xyz.screenplay.tasks.Login;
+import net.serenitybdd.screenplay.actors.OnStage;
+import xyz.screenplay.model.UserType;
+import xyz.screenplay.tasks.LoginAsCustomer;
+import xyz.screenplay.tasks.LoginAsManager;
 import xyz.screenplay.tasks.Navigate;
 
 @Slf4j
 public class CommonSteps {
 
-    @Given("{actor} has logged in")
-    public void managerHasLoggedIn(Actor actor) {
-        actor.attemptsTo(Navigate.toBankPage());
-        if (actor.getName().equals("Manager")) {
-            actor.attemptsTo(Login.asBankManager());
-        } else if (actor.getName().equals("Customer")) {
-            actor.attemptsTo(Login.asCustomer());
+    @Given("{word} has logged in")
+    public void managerHasLoggedIn(String userTypeString) {
+        UserType userType = UserType.byValue(userTypeString);
+        Actor user = OnStage.theActorCalled(userType.getType());
+        user.attemptsTo(Navigate.toBankPage());
+        if (userType == UserType.MANAGER) {
+            user.attemptsTo(LoginAsManager.login());
+        } else if (userType == UserType.CUSTOMER) {
+            user.attemptsTo(LoginAsCustomer.login());
         } else {
-            throw new IllegalArgumentException(String.format("Unkown Actor '%s'", actor.getName()));
+            throw new IllegalArgumentException(String.format("Unkown User Type '%s'", userTypeString));
         }
-        log.info("{} has logged in", actor.getName());
+        log.info("{} has logged in", user.getName());
     }
 
 }

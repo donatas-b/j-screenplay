@@ -11,7 +11,7 @@ import xyz.screenplay.questions.CustomerAccount;
 import xyz.screenplay.questions.CustomerSuccess;
 import xyz.screenplay.questions.CustomerTransactions;
 import xyz.screenplay.tasks.Customer;
-import xyz.screenplay.tasks.Login;
+import xyz.screenplay.tasks.LoginAsCustomerAgain;
 import xyz.screenplay.tasks.Navigate;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class CustomerSteps {
 
     @And("{actor} logs in again")
     public void heLogsInAgain(Actor actor) {
-        actor.attemptsTo(Login.asCustomerAgain());
+        actor.attemptsTo(LoginAsCustomerAgain.login());
     }
 
     @When("{actor} Resets his {string} account")

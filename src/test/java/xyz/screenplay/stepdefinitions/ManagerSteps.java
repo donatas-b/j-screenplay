@@ -31,8 +31,8 @@ import static org.hamcrest.Matchers.hasItem;
 @Slf4j
 public class ManagerSteps {
 
-    private CustomerInformation currentCustomer;
-    private String createdCustomerAccountNumber;
+    private static final String CURRENT_CUSTOMER = "currentCustomer";
+    private static final String CUSTOMER_ACCOUNT_NUMBER = "createdCustomerAccountNumber";
 
     private String getAlertMessage() {
         WebDriver driver = Serenity.getDriver();
@@ -44,10 +44,7 @@ public class ManagerSteps {
 
     @When("{actor} enters new Customer data")
     public void managerEntersNewCustomerData(Actor actor) {
-        actor.attemptsTo(Manager.goToAddCustomer());
-        log.info("{} is in Add Customer", actor.getName());
-        currentCustomer = CustomerInformation.random();
-        actor.attemptsTo(Customer.enterInformation(currentCustomer));
+        enterRandomCustomerInformation(actor);
         log.info("{} has entered customer info", actor.getName());
     }
 
@@ -71,42 +68,50 @@ public class ManagerSteps {
     @And("Customer appears in Customer List")
     public void customerShouldAppearInCustomerList() {
         theActorInTheSpotlight().attemptsTo(Manager.goToCustomers());
-        theActorInTheSpotlight().should(seeThat(CustomerList.asStrings(), hasItem(currentCustomer.toString())));
+        theActorInTheSpotlight().should(seeThat(CustomerList.asStrings(), hasItem(theActorInTheSpotlight().recall(CURRENT_CUSTOMER).toString())));
         log.info("new Customer was saved");
     }
 
     @And("there is a Customer")
     public void thereIsACustomer() {
-        theActorInTheSpotlight().attemptsTo(Manager.goToAddCustomer());
-        currentCustomer = CustomerInformation.random();
-        theActorInTheSpotlight().attemptsTo(Customer.enterInformation(currentCustomer));
+        enterRandomCustomerInformation(theActorInTheSpotlight());
         theActorInTheSpotlight().attemptsTo(Customer.addCustomer());
         log.info("new Customer was created");
+    }
+
+    private void enterRandomCustomerInformation(Actor actor) {
+        actor.attemptsTo(Manager.goToAddCustomer());
+        actor.remember(CURRENT_CUSTOMER, CustomerInformation.random());
+        actor.attemptsTo(Customer.enterInformation(actor.recall(CURRENT_CUSTOMER)));
     }
 
     @When("{actor} opens {string} Account for Customer")
     public void managerOpensAccountForCustomer(Actor actor, String currency) {
         actor.attemptsTo(Manager.goToOpenAccount());
-        actor.attemptsTo(Customer.openAccount(currentCustomer, Currency.byValue(currency)));
+        actor.attemptsTo(Customer.openAccount(actor.recall(CURRENT_CUSTOMER), Currency.byValue(currency)));
         String alertMessage = getAlertMessage();
-        createdCustomerAccountNumber = alertMessage.substring(alertMessage.indexOf(":") + 1);
-        currentCustomer.addAccount(createdCustomerAccountNumber);
+        actor.remember(CUSTOMER_ACCOUNT_NUMBER, alertMessage.substring(alertMessage.indexOf(":") + 1));
+        CustomerInformation customerInformation = actor.recall(CURRENT_CUSTOMER);
+        customerInformation.addAccount(actor.recall(CUSTOMER_ACCOUNT_NUMBER));
+        actor.remember(CURRENT_CUSTOMER, customerInformation);
         assertThat(alertMessage, containsString("Account created successfully with account Number"));
-        log.info("{} opened {} Account Number {} for {}", actor.getName(), currency, createdCustomerAccountNumber, currentCustomer.toString());
+        log.info("{} opened {} Account Number {} for {}", actor.getName(), currency, actor.recall(CUSTOMER_ACCOUNT_NUMBER), actor.recall(CURRENT_CUSTOMER).toString());
     }
 
     @Then("Customer Account should appear in Customer List")
     public void customerAccountShouldAppearInCustomersList() {
         theActorInTheSpotlight().attemptsTo(Manager.goToCustomers());
-        theActorInTheSpotlight().should(seeThat(CustomerList.accountsOf(currentCustomer), hasItem(createdCustomerAccountNumber)));
+        String createdAccountNumber = theActorInTheSpotlight().recall(CUSTOMER_ACCOUNT_NUMBER);
+        CustomerInformation customerInformation = theActorInTheSpotlight().recall(CURRENT_CUSTOMER);
+        theActorInTheSpotlight().should(seeThat(CustomerList.accountsOf(customerInformation), hasItem(createdAccountNumber)));
         log.info("Customer Account was saved");
     }
 
     @When("{actor} does Search for Customer")
     public void managerDoesSearchForCustomer(Actor actor) {
         actor.attemptsTo(Manager.goToCustomers());
-        actor.attemptsTo(Manager.searchCustomers(currentCustomer));
-        actor.should(seeThat(CustomerList.asStrings(), hasItem(currentCustomer.toString())));
+        actor.attemptsTo(Manager.searchCustomers(actor.recall(CURRENT_CUSTOMER)));
+        actor.should(seeThat(CustomerList.asStrings(), hasItem(actor.recall(CURRENT_CUSTOMER).toString())));
     }
 
     @And("Customer List should contain {int} Customer")
@@ -117,13 +122,13 @@ public class ManagerSteps {
     @When("{actor} deletes the Customer")
     public void managerDeletesTheCustomer(Actor actor) {
         actor.attemptsTo(Manager.goToCustomers());
-        actor.attemptsTo(Manager.deleteCustomer(currentCustomer));
+        actor.attemptsTo(Manager.deleteCustomer(actor.recall(CURRENT_CUSTOMER)));
     }
 
     @Then("Customer should no longer appear in Customer List")
     public void customerShouldNoLongerAppearInCustomerList() {
         theActorInTheSpotlight().attemptsTo(Manager.clearCustomerSearch());
-        theActorInTheSpotlight().attemptsTo(Manager.searchCustomers(currentCustomer));
+        theActorInTheSpotlight().attemptsTo(Manager.searchCustomers(theActorInTheSpotlight().recall(CURRENT_CUSTOMER)));
         theActorInTheSpotlight().attemptsTo(Ensure.that(CustomerList.count()).isEqualTo(0));
     }
 
