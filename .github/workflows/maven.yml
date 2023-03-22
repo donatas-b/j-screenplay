@@ -27,10 +27,14 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name:  Install Google Chrome
-      run:   |
-        chmod +x ./scripts/InstallChrome.sh
-                    ./scripts/InstallChrome.sh
+
+    - uses: actions/checkout@v2
+    - uses: nanasess/setup-chromedriver@v1
+    - run: |
+        export DISPLAY=:99
+        chromedriver --url-base=/wd/hub &
+        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Run tests
