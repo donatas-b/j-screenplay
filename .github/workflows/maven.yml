@@ -40,7 +40,3 @@ jobs:
     - name: Run tests
       run: mvn clean verify
       continue-on-error: true
-    - uses: actions/upload-artifact@v3
-      with:
-       name: report
-       path: target/site/serenity
